@@ -9,6 +9,8 @@ var router *gin.Engine
 func main() {
 	router = gin.Default()
 
+	createDatabase()
+
 	initializeRoutes()
 
 	router.Run()

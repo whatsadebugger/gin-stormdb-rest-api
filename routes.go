@@ -5,7 +5,7 @@ func initializeRoutes() {
 	// Handle the index route
 	router.POST("/address", createAddress)
 	router.GET("/address", getEveryAddress)
-	router.GET("/address/:phonenumber", getAddress)
-	router.PUT("/address/:phonenumber", updateAddress)
-	router.DELETE("/address/:phonenumber", deleteAddress)
+	router.GET("/address/:id", getAddress)
+	router.PUT("/address", updateAddress)
+	router.DELETE("/address/:id", deleteAddress)
 }

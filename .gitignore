@@ -1,0 +1,4 @@
+*.db
+vendor/
+tmp/
+gin-stormdb-rest-api
