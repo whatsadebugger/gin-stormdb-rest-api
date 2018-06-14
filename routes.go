@@ -8,4 +8,6 @@ func initializeRoutes() {
 	router.GET("/address/:id", getAddress)
 	router.PUT("/address", updateAddress)
 	router.DELETE("/address/:id", deleteAddress)
+	router.POST("/address/upload", importAddressBook)
+	router.GET("/addressbook", exportAddressBook)
 }

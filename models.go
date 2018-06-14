@@ -10,7 +10,6 @@ type address struct {
 	Phone     string `json:"phone"     storm:"index,unique"`
 }
 
-var addressBook []address
 var database *storm.DB
 
 func createDatabase() {
