@@ -9,6 +9,8 @@ to run do a go build in the project folder.
 
 after you can run with `./gin-stormdb-rest-api`  
 
+port number is 8080
+
 check handlers_test.go to see how to call each route
 
 available routes
@@ -19,4 +21,6 @@ GET    /address
 GET    /address/:id
 PUT    /address
 DELETE /address/:id
+POST   /address/upload
+GET    /addressbook
 ```

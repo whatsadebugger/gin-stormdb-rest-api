@@ -1,13 +1,17 @@
 package main
 
-func initializeRoutes() {
+import (
+	"github.com/gin-gonic/gin"
+)
+
+func initializeRoutes(r *gin.Engine) {
 
 	// Handle the index route
-	router.POST("/address", createAddress)
-	router.GET("/address", getEveryAddress)
-	router.GET("/address/:id", getAddress)
-	router.PUT("/address", updateAddress)
-	router.DELETE("/address/:id", deleteAddress)
-	router.POST("/address/upload", importAddressBook)
-	router.GET("/addressbook", exportAddressBook)
+	r.POST("/address", createAddress)
+	r.GET("/address", getEveryAddress)
+	r.GET("/address/:id", getAddress)
+	r.PUT("/address", updateAddress)
+	r.DELETE("/address/:id", deleteAddress)
+	r.POST("/address/upload", importAddressBook)
+	r.GET("/addressbook", exportAddressBook)
 }
