@@ -126,7 +126,6 @@ func TestImportCSV(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, 200, res.StatusCode)
 	assert.Equal(t, "imported 2 records", body)
-
 }
 
 func TestExportCSV(t *testing.T) {
