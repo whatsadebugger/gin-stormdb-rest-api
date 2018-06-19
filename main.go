@@ -1,20 +1,9 @@
 package main
 
-import (
-	"github.com/gin-gonic/gin"
-)
-
-func setupRouter() *gin.Engine {
-	r := gin.Default()
-	initializeRoutes(r)
-	return r
-}
-
 func main() {
+	app := NewApplication()
 
-	router := setupRouter()
-
-	createDatabase()
+	router := setupRouter(app)
 
 	router.Run(":8080")
 }

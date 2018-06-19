@@ -4,14 +4,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func initializeRoutes(r *gin.Engine) {
+func initializeRoutes(engine *gin.Engine, app *Application) {
 
-	// Handle the index route
-	r.POST("/address", createAddress)
-	r.GET("/address", getEveryAddress)
-	r.GET("/address/:id", getAddress)
-	r.PUT("/address", updateAddress)
-	r.DELETE("/address/:id", deleteAddress)
-	r.POST("/address/upload", importAddressBook)
-	r.GET("/addressbook", exportAddressBook)
+	ac := AddressController{app}
+	engine.POST("/address", ac.createAddress)
+	engine.GET("/address", ac.getEveryAddress)
+	engine.GET("/address/:id", ac.getAddress)
+	engine.PUT("/address", ac.updateAddress)
+	engine.DELETE("/address/:id", ac.deleteAddress)
+	engine.POST("/address/upload", ac.importAddressBook)
+	engine.GET("/addressbook", ac.exportAddressBook)
+}
+
+func setupRouter(app *Application) *gin.Engine {
+	engine := gin.Default()
+	initializeRoutes(engine, app)
+	return engine
 }

@@ -10,10 +10,8 @@ type address struct {
 	Phone     string `json:"phone"     storm:"index,unique"`
 }
 
-var database *storm.DB
-
-func createDatabase() {
+func createDatabase() *storm.DB {
 	db, err := storm.Open("address.db")
 	PanicIfError(err)
-	database = db
+	return db
 }

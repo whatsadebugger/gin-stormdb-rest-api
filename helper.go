@@ -17,12 +17,18 @@ func publicError(c *gin.Context, statusCode int, err error) {
 	c.JSON(statusCode, gin.H{"errors": []string{err.Error()}})
 }
 
-func findAddress(id string) (address, error) {
+func (app *Application) findAddress(id string) (address, error) {
 	var ad address
 	aid, err := strconv.Atoi(id)
 	if err != nil {
 		return ad, err
 	}
-	err = database.One("ID", aid, &ad)
+	err = app.Database.One("ID", aid, &ad)
 	return ad, err
+}
+
+func mustNotErr(err error) {
+	if err != nil {
+		panic(err)
+	}
 }

@@ -9,19 +9,23 @@ import (
 	"strconv"
 )
 
-func createAddress(c *gin.Context) {
+type AddressController struct {
+	App *Application
+}
+
+func (ac *AddressController) createAddress(c *gin.Context) {
 	ad := address{}
 
 	if err := c.ShouldBindJSON(&ad); err != nil {
 		publicError(c, 400, err)
-	} else if err = database.Save(&ad); err != nil {
+	} else if err = ac.App.Database.Save(&ad); err != nil {
 		c.AbortWithError(500, err)
 	} else {
 		c.JSON(200, ad)
 	}
 }
 
-func getAddress(c *gin.Context) {
+func (ac *AddressController) getAddress(c *gin.Context) {
 	id := c.Param("id")
 	var ad address
 	aid, err := strconv.Atoi(id)
@@ -30,7 +34,7 @@ func getAddress(c *gin.Context) {
 		return
 	}
 
-	if err := database.One("ID", aid, &ad); err == storm.ErrNotFound {
+	if err := ac.App.Database.One("ID", aid, &ad); err == storm.ErrNotFound {
 		publicError(c, 404, storm.ErrNotFound)
 	} else if err != nil {
 		c.AbortWithError(500, err)
@@ -39,9 +43,9 @@ func getAddress(c *gin.Context) {
 	}
 }
 
-func getEveryAddress(c *gin.Context) {
+func (ac *AddressController) getEveryAddress(c *gin.Context) {
 	var book []address
-	if err := database.All(&book); err == storm.ErrNotFound {
+	if err := ac.App.Database.All(&book); err == storm.ErrNotFound {
 		publicError(c, 404, storm.ErrNotFound)
 	} else if err != nil {
 		c.AbortWithError(500, err)
@@ -50,12 +54,12 @@ func getEveryAddress(c *gin.Context) {
 	}
 }
 
-func updateAddress(c *gin.Context) {
+func (ac *AddressController) updateAddress(c *gin.Context) {
 	var ad address
 
 	if err := c.ShouldBindJSON(&ad); err != nil {
 		publicError(c, 400, err)
-	} else if err = database.Update(&ad); err != nil {
+	} else if err = ac.App.Database.Update(&ad); err != nil {
 		c.AbortWithError(500, err)
 	} else {
 		c.JSON(200, ad)
@@ -63,21 +67,21 @@ func updateAddress(c *gin.Context) {
 	fmt.Println(ad)
 }
 
-func deleteAddress(c *gin.Context) {
+func (ac *AddressController) deleteAddress(c *gin.Context) {
 	id := c.Param("id")
 
-	if ad, err := findAddress(id); err == storm.ErrNotFound {
+	if ad, err := ac.App.findAddress(id); err == storm.ErrNotFound {
 		c.AbortWithError(404, errors.New("address entry not found"))
 	} else if err != nil {
 		c.AbortWithError(500, err)
-	} else if err = database.DeleteStruct(&ad); err != nil {
+	} else if err = ac.App.Database.DeleteStruct(&ad); err != nil {
 		c.AbortWithError(500, err)
 	} else {
 		c.String(200, "Success")
 	}
 }
 
-func importAddressBook(c *gin.Context) {
+func (ac *AddressController) importAddressBook(c *gin.Context) {
 	file, err := c.FormFile("file")
 	if err != nil {
 		c.AbortWithError(500, err)
@@ -109,7 +113,7 @@ func importAddressBook(c *gin.Context) {
 	}
 
 	for _, ad := range addressbook {
-		err = database.Save(&ad)
+		err = ac.App.Database.Save(&ad)
 		if err != nil {
 			c.AbortWithError(500, err)
 			return
@@ -118,9 +122,9 @@ func importAddressBook(c *gin.Context) {
 
 }
 
-func exportAddressBook(c *gin.Context) {
+func (ac *AddressController) exportAddressBook(c *gin.Context) {
 	var book []address
-	if err := database.All(&book); err == storm.ErrNotFound {
+	if err := ac.App.Database.All(&book); err == storm.ErrNotFound {
 		publicError(c, 404, storm.ErrNotFound)
 		return
 	} else if err != nil {
