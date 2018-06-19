@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -105,6 +106,45 @@ func TestDeleteAddress(t *testing.T) {
 	body := ParseResponseBody(res)
 
 	expected := "Success"
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Equal(t, expected, body)
+}
+
+func TestImportCSV(t *testing.T) {
+	httpserver := createTestApplication()
+	defer httpserver.Close()
+	url := httpserver.URL
+
+	data, err := os.Open("test.csv")
+	assert.NoError(t, err)
+
+	res, err := PostTextCSV(url+"/address/upload", data)
+	assert.NoError(t, err)
+
+	body := ParseResponseBody(res)
+
+	assert.NoError(t, err)
+	assert.Equal(t, 200, res.StatusCode)
+	assert.Equal(t, "imported 2 records", body)
+
+}
+
+func TestExportCSV(t *testing.T) {
+	httpserver := createTestApplication()
+	defer httpserver.Close()
+	url := httpserver.URL
+
+	address := `{"id":1,"firstname":"john","lastname":"snow","email":"snow@winterfell.com", "phone": "133-333-1313"}`
+	new := bytes.NewBufferString(address)
+	res, err := BasicPost(url+"/address", appjson, new)
+	assert.NoError(t, err)
+	assert.Equal(t, 200, res.StatusCode)
+
+	res, err = BasicGet(url + "/addressbook")
+
+	expected := "john,snow,snow@winterfell.com,133-333-1313\n"
+	body := ParseResponseBody(res)
+	assert.NoError(t, err)
 	assert.Equal(t, 200, res.StatusCode)
 	assert.Equal(t, expected, body)
 }

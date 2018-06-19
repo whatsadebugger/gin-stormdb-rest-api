@@ -39,3 +39,12 @@ func BasicPut(url string, contentType string, body io.Reader) (*http.Response, e
 	resp, err := client.Do(request)
 	return resp, err
 }
+
+func PostTextCSV(url string, body io.Reader) (*http.Response, error) {
+	client := &http.Client{}
+	request, _ := http.NewRequest("POST", url, body)
+	request.Header.Set("Content-Type", "text/csv")
+
+	resp, err := client.Do(request)
+	return resp, err
+}

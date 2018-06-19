@@ -82,22 +82,12 @@ func (ac *AddressController) deleteAddress(c *gin.Context) {
 }
 
 func (ac *AddressController) importAddressBook(c *gin.Context) {
-	file, err := c.FormFile("file")
-	if err != nil {
-		c.AbortWithError(500, err)
-		return
-	}
 
-	f, err := file.Open()
-	if err != nil {
-		c.AbortWithError(500, err)
-		return
-	}
-	defer f.Close()
+	body := c.Request.Body
 
 	var addressbook []address
 
-	lines, err := csv.NewReader(f).ReadAll()
+	lines, err := csv.NewReader(body).ReadAll()
 	if err != nil {
 		c.AbortWithError(500, err)
 		return
@@ -111,14 +101,17 @@ func (ac *AddressController) importAddressBook(c *gin.Context) {
 				Phone:    line[3],
 			})
 	}
-
+	count := 0
 	for _, ad := range addressbook {
 		err = ac.App.Database.Save(&ad)
+		count += 1
 		if err != nil {
 			c.AbortWithError(500, err)
 			return
 		}
 	}
+
+	c.String(200, fmt.Sprintf("imported %d records", count))
 
 }
 
