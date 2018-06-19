@@ -9,6 +9,7 @@ import (
 	"strconv"
 )
 
+// AddressController is the controller responsible for all address requests
 type AddressController struct {
 	App *Application
 }
@@ -104,7 +105,7 @@ func (ac *AddressController) importAddressBook(c *gin.Context) {
 	count := 0
 	for _, ad := range addressbook {
 		err = ac.App.Database.Save(&ad)
-		count += 1
+		count++
 		if err != nil {
 			c.AbortWithError(500, err)
 			return

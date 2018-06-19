@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// BasicPost will make a POST request to given url and with given body
 func BasicPost(url string, contentType string, body io.Reader) (*http.Response, error) {
 	client := &http.Client{}
 	request, _ := http.NewRequest("POST", url, body)
@@ -14,6 +15,7 @@ func BasicPost(url string, contentType string, body io.Reader) (*http.Response, 
 	return resp, err
 }
 
+// BasicGet will make a Get request to given url
 func BasicGet(url string) (*http.Response, error) {
 	client := &http.Client{}
 	request, _ := http.NewRequest("GET", url, nil)
@@ -22,6 +24,7 @@ func BasicGet(url string) (*http.Response, error) {
 	return resp, err
 }
 
+// BasicDelete will make a DELETE request to given url and with given body
 func BasicDelete(url string, contentType string, body io.Reader) (*http.Response, error) {
 	client := &http.Client{}
 	request, _ := http.NewRequest("DELETE", url, body)
@@ -31,6 +34,7 @@ func BasicDelete(url string, contentType string, body io.Reader) (*http.Response
 	return resp, err
 }
 
+// BasicPut will make a put request to given url and with given body
 func BasicPut(url string, contentType string, body io.Reader) (*http.Response, error) {
 	client := &http.Client{}
 	request, _ := http.NewRequest("PUT", url, body)
@@ -40,6 +44,7 @@ func BasicPut(url string, contentType string, body io.Reader) (*http.Response, e
 	return resp, err
 }
 
+// PostTextCSV post a csv file to a url
 func PostTextCSV(url string, body io.Reader) (*http.Response, error) {
 	client := &http.Client{}
 	request, _ := http.NewRequest("POST", url, body)

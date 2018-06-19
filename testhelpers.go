@@ -27,15 +27,16 @@ func createTestDatabase() *storm.DB {
 func createTestApplication() *httptest.Server {
 	db := createTestDatabase()
 	app := &Application{Database: db}
-	api := newApiServer(app)
+	api := newAPIServer(app)
 	return api
 }
 
-func newApiServer(app *Application) *httptest.Server {
+func newAPIServer(app *Application) *httptest.Server {
 	apiEngine := setupRouter(app)
 	return httptest.NewServer(apiEngine)
 }
 
+// ParseResponseBody parses response body into a string
 func ParseResponseBody(resp *http.Response) string {
 	buf := bytes.NewBuffer(nil)
 	buf.ReadFrom(resp.Body)
